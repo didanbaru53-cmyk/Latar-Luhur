@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rekap Survei Latar Luhur</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<style>
+/* Layout: laporan satu kolom -> kesimpulan dulu, angka kunci, lalu rincian per pertanyaan dalam grid 2 kolom */
+:root{
+  --paper:#F5F2EA; --surface:#FFFFFF; --card:#FBEFD3; --card-line:#E3CF9F;
+  --forest:#244A3B; --forest-ink:#F3EEDD; --ochre:#94661A; --ink:#1E2420; --muted:#5D655F;
+  --line:#DCD6C8; --bar:#244A3B; --bar-soft:#CFC6AE; --good:#2F6B4F; --bad:#A4432C; --good-bg:#E3EEE6; --bad-bg:#F5E1DA; --focus:#C98A1E;
+  --body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121915; --surface:#19221D; --card:#222B23; --card-line:#3A4637;
+  --forest:#2E5E4A; --forest-ink:#F1ECDD; --ochre:#E0B060; --ink:#ECE8DC; --muted:#A5ADA4;
+  --line:#2F3A33; --bar:#7CC3A0; --bar-soft:#3A4637; --good:#7CC3A0; --bad:#E59A82; --good-bg:#1D3027; --bad-bg:#3A2420; --focus:#E0B060; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#121915; --surface:#19221D; --card:#222B23; --card-line:#3A4637;
+  --forest:#2E5E4A; --forest-ink:#F1ECDD; --ochre:#E0B060; --ink:#ECE8DC; --muted:#A5ADA4;
+  --line:#2F3A33; --bar:#7CC3A0; --bar-soft:#3A4637; --good:#7CC3A0; --bad:#E59A82; --good-bg:#1D3027; --bad-bg:#3A2420; --focus:#E0B060; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:1000px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+header{border-bottom:1px solid var(--line)}
+header .wrap{padding-block:2rem 1.6rem;display:grid;gap:.6rem}
+header h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:800}
+header h1 em{font-family:var(--serif);font-weight:500;color:var(--ochre)}
+.meta{display:flex;gap:.6rem 1.2rem;flex-wrap:wrap;color:var(--muted);font-size:.86rem;align-items:center}
+.pill{display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--card);border:1px solid var(--card-line);color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:.85rem;border-radius:999px;padding:.5rem 1rem;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--forest);border-color:var(--forest);color:var(--forest-ink)}
+main .wrap{padding-block:1.8rem 3rem;display:grid;gap:1.8rem}
+.verdict{border-radius:12px;padding:1.3rem 1.4rem;display:grid;gap:.5rem;border:1px solid}
+.verdict.ok{background:var(--good-bg);border-color:var(--good)}
+.verdict.no{background:var(--bad-bg);border-color:var(--bad)}
+.verdict .tag{font-weight:800;font-size:1.5rem}
+.verdict.ok .tag{color:var(--good)} .verdict.no .tag{color:var(--bad)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink)}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{padding:.9rem .9rem .9rem 0;display:grid;gap:.15rem;min-width:0}
+.kpi + .kpi{padding-left:.9rem;border-left:1px solid var(--line)}
+@media (max-width:760px){.kpi:nth-child(3){padding-left:0;border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--line)}}
+.kpi .v{font-size:1.7rem;font-weight:800}
+.kpi .k{font-size:.82rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.15rem;display:grid;gap:.8rem;align-content:start;min-width:0}
+.panel h3{font-size:1rem;font-weight:700}
+.panel .note{font-size:.8rem;color:var(--muted)}
+.bars{display:grid;gap:.5rem}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.15rem .7rem;font-size:.86rem}
+.row .lab{min-width:0}
+.row .cnt{color:var(--muted);text-align:right}
+.track{grid-column:1/-1;height:9px;background:var(--bar-soft);border-radius:999px;overflow:hidden}
+.track span{display:block;height:100%;background:var(--bar);border-radius:999px}
+.row.hl .track span{background:var(--ochre)}
+.wide{grid-column:1/-1}
+.quotes{display:grid;gap:.5rem;margin:0;padding:0;list-style:none}
+.quotes li{padding:.6rem .8rem;border-left:3px solid var(--card-line);background:var(--paper);font-size:.9rem}
+.summary{background:var(--surface);border:1px solid var(--forest);border-radius:10px;padding:1.1rem 1.2rem;display:grid;gap:.8rem}
+.summary p.txt{white-space:pre-line;max-width:75ch}
+.copied{font-size:.82rem;color:var(--good);font-weight:700}
+.empty{padding:2rem;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+footer .wrap{padding-block:1.4rem 2rem}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <p class="eyebrow">Laporan hasil survei · Student Pass Latar Luhur</p>
+  <h1>Rekap survei <em>minat</em> paket yoga</h1>
+  <div class="meta">
+    <span class="pill" id="sourcePill">Memuat data…</span>
+    <span id="updated"></span>
+    <button class="btn" type="button" id="reload">Muat ulang data</button>
+    <a class="btn" href="index.html">Kembali ke website</a>
+  </div>
+</div></header>
+
+<main><div class="wrap" id="out">
+  <div class="empty">Memuat jawaban dari spreadsheet…</div>
+</div></main>
+
+<footer><div class="wrap">Prototipe tugas UTS Uji Kelayakan Ide Bisnis. Nama dan nomor WhatsApp responden tidak ditampilkan di halaman ini. Bukan situs resmi Latar Luhur.</div></footer>
+
+<script>
+/* =====================================================================
+   SATU-SATUNYA PENGATURAN: tempel link Apps Script yang SAMA dengan
+   di index.html. Kalau masih kosong, halaman memakai DATA CONTOH.
+   ===================================================================== */
+const SHEET_URL = "";
+
+/* Asumsi dari hitungan kelayakan (Soal 3) */
+const TARGET_PEMBELI = 10;      // syarat "Layak": ±10 pembeli potensial
+const BEP_PEMBELI = 3;          // 12 sesi per bulan ≈ 3 pembeli
+const MARGIN_PER_SESI = 45000;
+const BIAYA_TETAP = 514000;
+const MODAL_AWAL = 14650000;
+
+const ORDER = {
+  status:["Mahasiswa aktif","Pekerja","Peserta magang","Lainnya"],
+  kampus:["UNS","UMS","UIN Raden Mas Said","ISI Surakarta","Kampus lain","Bukan mahasiswa"],
+  usia:["18–20 tahun","21–23 tahun","24–26 tahun","27 tahun ke atas"],
+  pengalaman:["Belum pernah","Pernah 1–3 kali","Dulu rutin, sekarang tidak","Rutin saat ini"],
+  kenal:["Belum pernah dengar","Tahu, tapi belum pernah ikut kelas","Pernah ikut kelas"],
+  paket:["Student Pass","Booking online","Bring a Friend","Birthday Treat","Belum ada yang menarik"],
+  minat:["1","2","3","4","5"],
+  harga:["Di bawah Rp150.000","Rp150.000–Rp179.000","Rp180.000–Rp199.000","Rp200.000","Di atas Rp200.000"],
+  jam:["Pagi 08.00 hari kerja","Sore 16.30 hari kerja","Malam hari kerja","Akhir pekan"],
+  faktor:["Harga per sesi","Lokasi dekat kampus atau rumah","Suasana semi-outdoor","Booking online dan pengingat","Kualitas instruktur","Bisa datang bersama teman"],
+  hambatan:["Harga","Waktu atau jadwal","Lokasi","Belum percaya diri / pemula","Tidak ada teman","Tidak ada hambatan"],
+  respon:["Berminat","Belum berminat"]
+};
+const MULTI = new Set(["paket","jam","faktor"]);
+
+/* ---------- data contoh (dipakai hanya kalau SHEET_URL kosong) ---------- */
+function sampleRows(){
+  const pick = (arr, i, k) => arr[(i * k + 3) % arr.length];
+  const rows = [];
+  const notes = ["Ada kelas pemula di akhir pekan","Kalau bisa bayar per minggu","Lokasinya tolong dibagikan di Maps","Student Pass bagus, asal jadwal sore tetap ada","Mau ada kelas malam"];
+  for (let i = 0; i < 26; i++) {
+    const minat = String([5,4,3,4,2,5,3,4,1,5,4,3,2][i % 13]);
+    rows.push({
+      respon: +minat >= 3 ? "Berminat" : "Belum berminat",
+      status: pick(["Mahasiswa aktif","Mahasiswa aktif","Mahasiswa aktif","Pekerja","Peserta magang"], i, 7),
+      kampus: pick(["UNS","UNS","UMS","UIN Raden Mas Said","ISI Surakarta","Bukan mahasiswa"], i, 5),
+      usia: pick(ORDER.usia.slice(0,3).concat(["21–23 tahun"]), i, 3),
+      pengalaman: pick(ORDER.pengalaman, i, 5),
+      kenal: pick(ORDER.kenal, i, 2),
+      paket: ["Student Pass", i % 3 ? "Bring a Friend" : "Booking online", i % 4 ? "" : "Birthday Treat"].filter(Boolean).join(", "),
+      minat,
+      harga: pick(["Rp150.000–Rp179.000","Rp180.000–Rp199.000","Rp200.000","Rp180.000–Rp199.000","Di bawah Rp150.000"], i, 3),
+      jam: pick(["Sore 16.30 hari kerja","Pagi 08.00 hari kerja, Sore 16.30 hari kerja","Akhir pekan","Sore 16.30 hari kerja, Akhir pekan"], i, 5),
+      faktor: pick(["Harga per sesi, Lokasi dekat kampus atau rumah","Harga per sesi, Suasana semi-outdoor","Kualitas instruktur, Booking online dan pengingat","Harga per sesi, Bisa datang bersama teman"], i, 3),
+      hambatan: pick(ORDER.hambatan, i, 5),
+      masukan: i % 5 === 0 ? notes[(i / 5) % notes.length] : ""
+    });
+  }
+  return rows;
+}
+
+/* ---------- hitung ---------- */
+function tally(recs, id){
+  const m = new Map((ORDER[id] || []).map(k => [k, 0]));
+  let answered = 0;
+  recs.forEach(r => {
+    const v = r[id]; if (!v) return;
+    answered++;
+    const parts = MULTI.has(id) ? v.split(/,\s(?=[A-Z0-9])/) : [v];
+    parts.forEach(p => m.set(p.trim(), (m.get(p.trim()) || 0) + 1));
+  });
+  return { m, answered };
+}
+const rp = n => "Rp" + Math.round(n).toLocaleString("id-ID");
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function bars(id, title, note, highlight){
+  const { m, answered } = tally(DATA, id);
+  const max = Math.max(1, ...m.values());
+  const rows = [...m.entries()].map(([k, v]) =>
+    `<div class="row ${highlight && highlight.includes(k) ? "hl" : ""}"><span class="lab">${esc(id === "minat" ? k + (k === "1" ? " · tidak mungkin" : k === "5" ? " · sangat mungkin" : "") : k)}</span>
+     <span class="cnt num">${v} · ${pct(v, answered)}%</span><div class="track"><span style="width:${v / max * 100}%"></span></div></div>`).join("");
+  return `<section class="panel"><h3>${esc(title)}</h3>${note ? `<p class="note">${note}</p>` : ""}<div class="bars">${rows}</div>
+    <p class="note num">${answered} jawaban${MULTI.has(id) ? " · boleh pilih lebih dari satu" : ""}</p></section>`;
+}
+
+let DATA = [];
+
+function render(){
+  const out = document.getElementById("out");
+  const n = DATA.length;
+  if (!n) { out.innerHTML = `<div class="empty">Belum ada jawaban yang masuk. Bagikan link website ke responden, lalu klik “Muat ulang data”.</div>`; return; }
+
+  const berminat = DATA.filter(r => r.respon === "Berminat").length;
+  const pembeli = DATA.filter(r => +r.minat >= 4).length;
+  const mahasiswa = DATA.filter(r => r.status === "Mahasiswa aktif").length;
+  const hargaT = tally(DATA, "harga");
+  const setuju200 = (hargaT.m.get("Rp200.000") || 0) + (hargaT.m.get("Di atas Rp200.000") || 0);
+  const layak = pembeli >= TARGET_PEMBELI;
+  const sesi = pembeli * 4;
+  const laba = sesi * MARGIN_PER_SESI - BIAYA_TETAP;
+  const bulan = laba > 0 ? MODAL_AWAL / laba : null;
+  const p200 = pct(setuju200, hargaT.answered);
+  const hargaNote = p200 > 50
+    ? `Mayoritas responden (${p200}%) menganggap Rp200.000 atau lebih wajar, jadi harga Student Pass bisa dipertahankan.`
+    : p200 === 50
+    ? `Setengah responden (50%) menganggap Rp200.000 atau lebih wajar, jadi harga Rp200.000 bisa dipertahankan sambil menyiapkan skenario Rp180.000 (margin Rp40.000, BEP 13 sesi).`
+    : `Hanya ${p200}% responden yang menganggap Rp200.000 atau lebih wajar, jadi skenario Rp180.000 (margin Rp40.000, BEP 13 sesi) layak dipertimbangkan.`;
+
+  const masukan = DATA.map(r => r.masukan).filter(Boolean);
+
+  const ringkasan =
+`Survei minat diisi oleh ${n} responden (${mahasiswa} di antaranya mahasiswa aktif). Sebanyak ${berminat} responden (${pct(berminat, n)}%) menekan tombol "Saya berminat", dan ${pembeli} responden (${pct(pembeli, n)}%) memilih skala 4 atau 5 untuk kemungkinan membeli Student Pass Rp200.000 dalam sebulan ke depan. ${pembeli} orang ini dipakai sebagai perkiraan pembeli per bulan.
+
+${laba > 0
+  ? `Dengan ${pembeli} pembeli (${sesi} sesi) dan margin Rp45.000 per sesi, laba tambahan per bulan sekitar ${rp(laba)}, sehingga modal awal Rp14.650.000 kembali dalam ${bulan.toFixed(1).replace(".", ",")} bulan.`
+  : `Dengan ${pembeli} pembeli (${sesi} sesi) dan margin Rp45.000 per sesi, margin yang terkumpul ${rp(sesi * MARGIN_PER_SESI)} per bulan belum menutup biaya tetap Rp514.000.`} ${hargaNote}
+
+Kesimpulan: ${layak ? "Layak" : "Perlu Perbaikan"}, karena jumlah pembeli potensial ${layak ? "memenuhi" : "belum memenuhi"} syarat sekitar ${TARGET_PEMBELI} pembeli per bulan.`;
+
+  out.innerHTML = `
+  <section class="verdict ${layak ? "ok" : "no"}">
+    <p class="eyebrow">Kesimpulan sementara</p>
+    <p class="tag">${layak ? "Layak" : "Perlu Perbaikan"}</p>
+    <p>${pembeli} pembeli potensial (skala 4–5) dibanding syarat ±${TARGET_PEMBELI} pembeli per bulan. ${pembeli >= BEP_PEMBELI ? `Titik impas ${BEP_PEMBELI} pembeli sudah terlampaui.` : `Titik impas ${BEP_PEMBELI} pembeli belum tercapai.`}</p>
+  </section>
+
+  <div class="kpis">
+    <div class="kpi"><span class="v num">${n}</span><span class="k">responden</span></div>
+    <div class="kpi"><span class="v num">${pct(berminat, n)}%</span><span class="k">menekan “Saya berminat” (${berminat} orang)</span></div>
+    <div class="kpi"><span class="v num">${pembeli}</span><span class="k">pembeli potensial, skala 4–5</span></div>
+    <div class="kpi"><span class="v num">${laba > 0 ? rp(laba) : "–"}</span><span class="k">perkiraan laba tambahan per bulan</span></div>
+  </div>
+
+  <section class="summary">
+    <p class="eyebrow">Paragraf untuk laporan Soal 3</p>
+    <p class="txt" id="sumtxt">${esc(ringkasan)}</p>
+    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap"><button class="btn primary" type="button" id="copy">Salin paragraf</button><span class="copied" id="copied" hidden>Tersalin</span></div>
+  </section>
+
+  <div class="grid">
+    ${bars("minat", "Kemungkinan membeli Student Pass dalam sebulan", "Skala 4 dan 5 dihitung sebagai pembeli potensial.", ["4","5"])}
+    ${bars("harga", "Harga wajar untuk 4 sesi", hargaNote, ["Rp200.000","Di atas Rp200.000"])}
+    ${bars("paket", "Paket yang menarik", "")}
+    ${bars("respon", "Pilihan awal di website", "")}
+    ${bars("status", "Status responden", "")}
+    ${bars("kampus", "Asal kampus", "")}
+    ${bars("jam", "Jam kelas yang cocok", "")}
+    ${bars("faktor", "Faktor penentu memilih studio", "Maksimal tiga pilihan per orang.")}
+    ${bars("hambatan", "Hambatan utama", "")}
+    ${bars("pengalaman", "Pengalaman yoga", "")}
+    ${bars("kenal", "Kenal dengan Latar Luhur", "")}
+    ${bars("usia", "Usia", "")}
+    <section class="panel wide"><h3>Masukan responden</h3>
+      ${masukan.length ? `<ul class="quotes">${masukan.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : `<p class="note">Belum ada masukan tertulis.</p>`}
+    </section>
+  </div>`;
+
+  document.getElementById("copy").addEventListener("click", () => {
+    const t = document.getElementById("sumtxt");
+    const done = () => { const c = document.getElementById("copied"); c.hidden = false; setTimeout(() => c.hidden = true, 2000); };
+    try {
+      navigator.clipboard.writeText(t.innerText).then(done, () => selectText(t));
+    } catch (e) { selectText(t); }
+  });
+}
+function selectText(el){ const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+async function load(){
+  const pill = document.getElementById("sourcePill");
+  const out = document.getElementById("out");
+  if (!SHEET_URL) {
+    DATA = sampleRows();
+    pill.textContent = "Data contoh · spreadsheet belum disambungkan";
+    document.getElementById("updated").textContent = "";
+    render(); return;
+  }
+  pill.textContent = "Memuat…";
+  try {
+    const res = await fetch(SHEET_URL + (SHEET_URL.includes("?") ? "&" : "?") + "t=" + Date.now());
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const json = await res.json();
+    DATA = (json.rows || []).map(r => { const o = {}; for (const k in r) o[k] = String(r[k] ?? "").replace(/^'/, "").trim(); return o; });
+    pill.textContent = "Data asli dari spreadsheet";
+    document.getElementById("updated").textContent = "Dimuat " + new Date().toLocaleString("id-ID", { dateStyle:"medium", timeStyle:"short" });
+    render();
+  } catch (e) {
+    pill.textContent = "Gagal memuat";
+    out.innerHTML = `<div class="empty">Data spreadsheet tidak bisa dimuat (${esc(e.message)}). Pastikan link Apps Script di SHEET_URL benar dan aksesnya “Siapa saja”.</div>`;
+  }
+}
+document.getElementById("reload").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

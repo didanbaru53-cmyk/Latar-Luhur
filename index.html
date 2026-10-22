@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paket Yoga Latar Luhur</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Prototipe usulan paket yoga untuk mahasiswa dan umum di Latar Luhur, Solo, beserta survei minat. Tugas kuliah, bukan halaman resmi studio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<style>
+/* Layout: katalog satu halaman -> hero dengan strip harga, 4 kartu paket, alur booking, survei, ringkasan kajian */
+:root{
+  --paper:#F5F2EA; --surface:#FFFFFF; --card:#FBEFD3; --card-line:#E3CF9F;
+  --forest:#244A3B; --forest-ink:#F3EEDD; --ochre:#94661A; --ink:#1E2420; --muted:#5D655F;
+  --line:#DCD6C8; --sun:rgba(36,74,59,.07); --focus:#C98A1E; --ok:#2F6B4F; --warn-bg:#F1E3C2;
+  --display:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121915; --surface:#19221D; --card:#222B23; --card-line:#3A4637;
+  --forest:#2E5E4A; --forest-ink:#F1ECDD; --ochre:#E0B060; --ink:#ECE8DC; --muted:#A5ADA4;
+  --line:#2F3A33; --sun:rgba(224,176,96,.06); --focus:#E0B060; --ok:#7CC3A0; --warn-bg:#2C2A1F; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#121915; --surface:#19221D; --card:#222B23; --card-line:#3A4637;
+  --forest:#2E5E4A; --forest-ink:#F1ECDD; --ochre:#E0B060; --ink:#ECE8DC; --muted:#A5ADA4;
+  --line:#2F3A33; --sun:rgba(224,176,96,.06); --focus:#E0B060; --ok:#7CC3A0; --warn-bg:#2C2A1F; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre)}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+
+/* notice */
+.notice{background:var(--warn-bg);border-bottom:1px solid var(--card-line);font-size:.85rem}
+.notice .wrap{padding-block:.55rem;display:flex;gap:.5rem;flex-wrap:wrap;justify-content:space-between}
+.notice b{font-weight:700}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.7rem}
+.brand{font-family:var(--serif);font-weight:600;font-size:1.15rem;text-decoration:none}
+.brand small{font-family:var(--body);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:.4rem}
+.navlinks{display:flex;gap:1.1rem;font-size:.9rem;font-weight:600}
+.navlinks a{text-decoration:none;color:var(--muted)}
+.navlinks a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;font:inherit;font-weight:700;font-size:.92rem;border-radius:999px;padding:.7rem 1.25rem;border:1.5px solid var(--forest);background:var(--forest);color:var(--forest-ink);text-decoration:none;cursor:pointer;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.small{padding:.45rem .9rem;font-size:.82rem}
+@media (max-width:640px){.navlinks{display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-180px;top:-120px;width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle,var(--sun) 0 30%,transparent 30.5% 38%,var(--sun) 38.5% 52%,transparent 52.5% 62%,var(--sun) 62.5% 78%,transparent 78.5%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;padding-block:3.2rem 2.4rem;display:grid;gap:1.6rem}
+.hero h1{font-size:clamp(2rem,5.2vw,3.4rem);font-weight:800;max-width:16ch}
+.hero h1 em{font-family:var(--serif);font-style:italic;font-weight:500;color:var(--ochre)}
+.hero .lede{max-width:58ch;color:var(--muted);font-size:1.05rem}
+.hero .ctas{display:flex;gap:.7rem;flex-wrap:wrap}
+
+.pricestrip{display:grid;grid-template-columns:1.3fr repeat(4,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pricestrip > div{padding:.9rem 1rem;min-width:0}
+.pricestrip > div + div{border-left:1px solid var(--line)}
+.pricestrip .head{font-weight:700;font-size:.9rem;line-height:1.35}
+.pricestrip .lbl{font-size:.74rem;color:var(--muted)}
+.pricestrip .val{font-weight:800;font-size:1.15rem}
+.pricestrip .per{font-size:.72rem;color:var(--muted)}
+@media (max-width:760px){
+  .pricestrip{grid-template-columns:1fr 1fr}
+  .pricestrip .head{grid-column:1/-1}
+  .pricestrip > div + div{border-left:0;border-top:1px solid var(--line)}
+  .pricestrip > div:nth-child(odd):not(.head){border-left:1px solid var(--line)}
+}
+
+/* sections */
+section{padding-block:3.2rem;scroll-margin-top:60px}
+.sechead{display:grid;gap:.5rem;margin-bottom:1.6rem;max-width:62ch}
+.sechead h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800}
+.sechead p{color:var(--muted)}
+
+/* package cards */
+.packs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:980px){.packs{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.packs{grid-template-columns:1fr}}
+.pack{display:flex;flex-direction:column;gap:.55rem;background:var(--card);border:1px solid var(--card-line);border-radius:10px;padding:1.2rem 1.15rem 1.15rem;min-width:0}
+.pack.main{background:var(--forest);border-color:var(--forest);color:var(--forest-ink)}
+.pack.main .eyebrow{color:#E9C77E}
+.pack h3{font-size:1.2rem;font-weight:700}
+.pack .price{font-size:2rem;font-weight:800;line-height:1.05;color:var(--forest)}
+.pack.main .price{color:var(--forest-ink)}
+:root[data-theme="dark"] .pack:not(.main) .price{color:var(--ochre)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pack:not(.main) .price{color:var(--ochre)}}
+.pack .sub{font-size:.8rem;opacity:.8}
+.pack ul{margin:.2rem 0 0;padding-left:1.1rem;font-size:.88rem;display:grid;gap:.25rem;flex:1}
+.pack .btn{margin-top:.6rem;align-self:flex-start}
+.pack.main .btn{background:var(--forest-ink);color:#244A3B;border-color:var(--forest-ink)}
+.pack:not(.main) .btn{background:transparent;color:var(--ink);border-color:var(--card-line)}
+.pack .btn[aria-pressed="true"]::before{content:"✓"}
+
+/* booking flow */
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line)}
+@media (max-width:760px){.flow{grid-template-columns:1fr}}
+.step{padding:1.3rem 1.2rem 1.2rem 0;display:grid;gap:.35rem;min-width:0}
+.step + .step{padding-left:1.2rem;border-left:1px solid var(--line)}
+@media (max-width:760px){.step + .step{padding-left:0;border-left:0;border-top:1px solid var(--line)}}
+.step .n{font-family:var(--serif);font-size:1.6rem;color:var(--ochre);line-height:1}
+.step h3{font-size:1.02rem;font-weight:700}
+.step p{color:var(--muted);font-size:.92rem}
+
+/* survey */
+.survey-band{background:var(--surface);border-block:1px solid var(--line)}
+.survey{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:2.4rem}
+@media (max-width:860px){.survey{grid-template-columns:1fr}}
+.survey aside{display:grid;gap:1rem;align-content:start}
+.survey aside .facts{display:grid;gap:.5rem;font-size:.9rem;color:var(--muted)}
+.progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--forest);transition:width .25s ease}
+form{display:grid;gap:1.1rem}
+fieldset{border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.15rem 1.2rem;margin:0;min-width:0;background:var(--paper)}
+legend{padding:0 .4rem;margin-left:-.4rem;font-weight:700;font-size:1rem;line-height:1.35}
+legend .q{color:var(--ochre);font-variant-numeric:tabular-nums;margin-right:.35rem}
+legend .req{color:#B2452F;margin-left:.15rem}
+.hint{font-size:.82rem;color:var(--muted);margin:.15rem 0 .7rem}
+.opts{display:grid;gap:.45rem}
+.opts.cols{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.opt{display:flex;align-items:flex-start;gap:.6rem;padding:.55rem .7rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font-size:.93rem}
+.opt:has(input:checked){border-color:var(--forest);box-shadow:inset 0 0 0 1px var(--forest)}
+.opt input{margin-top:.25rem;accent-color:var(--forest)}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
+.scale label{display:grid;place-items:center;gap:.1rem;padding:.6rem .2rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font-weight:700}
+.scale label:has(input:checked){background:var(--forest);color:var(--forest-ink);border-color:var(--forest)}
+.scale input{position:absolute;opacity:0;pointer-events:none}
+.scale label:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+.scale-ends{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-top:.35rem}
+textarea,input[type=text]{width:100%;font:inherit;font-size:.95rem;padding:.7rem .8rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+fieldset.err{border-color:#B2452F}
+.errmsg{color:#B2452F;font-size:.82rem;font-weight:600;margin-top:.5rem}
+.submitrow{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.submitrow small{color:var(--muted)}
+.gate{border:1px solid var(--forest);border-radius:10px;padding:1.6rem;display:grid;gap:.8rem;background:var(--paper)}
+.gate h3{font-size:clamp(1.25rem,2.6vw,1.6rem);font-weight:800}
+.gate p:not(.eyebrow){color:var(--muted)}
+.choice{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding:.8rem 1rem;border-radius:10px;background:var(--card);border:1px solid var(--card-line);font-size:.92rem}
+.choice b{color:var(--ink)}
+.linkbtn{font:inherit;font-size:.85rem;font-weight:700;background:none;border:0;color:var(--ochre);cursor:pointer;text-decoration:underline;padding:0}
+.thanks{border:1px solid var(--forest);border-radius:10px;padding:1.6rem;display:grid;gap:.7rem;background:var(--paper)}
+.thanks h3{font-size:1.4rem}
+
+/* study summary */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid var(--ink)}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{padding:1rem 1rem 1rem 0;display:grid;gap:.2rem;min-width:0}
+.kpi + .kpi{padding-left:1rem;border-left:1px solid var(--line)}
+@media (max-width:860px){.kpi:nth-child(3){padding-left:0;border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--line)}}
+.kpi .v{font-size:1.7rem;font-weight:800}
+.kpi .k{font-size:.85rem;color:var(--muted)}
+.tablewrap{overflow-x:auto;margin-top:1.6rem;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
+th,td{text-align:left;padding:.65rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.verdict{margin-top:1.4rem;padding:1rem 1.15rem;border-left:4px solid var(--forest);background:var(--surface);max-width:72ch}
+details{margin-top:1.4rem}
+summary{cursor:pointer;font-weight:700}
+footer{padding-block:2rem 2.6rem;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line)}
+footer .wrap{display:grid;gap:.4rem}
+</style>
+</head>
+<body>
+
+<div class="notice" role="note"><div class="wrap">
+  <span><b>Prototipe usulan tugas kuliah.</b> Bukan halaman resmi Latar Luhur; semua harga paket baru di sini adalah usulan untuk diuji.</span>
+  <span>Survei ±3 menit</span>
+</div></div>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="#top">Latar Luhur <small>usulan · Solo</small></a>
+  <div class="navlinks"><a href="#paket">Paket</a><a href="#booking">Booking</a><a href="#survei">Survei</a><a href="#kajian">Kajian</a></div>
+  <button class="btn small" type="button" data-start="Berminat">Saya berminat</button>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <p class="eyebrow">Usulan untuk studio yoga Latar Luhur &nbsp;|&nbsp; Solo</p>
+  <h1>Prototipe paket yoga untuk <em>mahasiswa</em> dan umum</h1>
+  <p class="lede">Empat usulan supaya yoga rutin di Latar Luhur lebih terjangkau dan lebih mudah dipesan. Lihat paketnya, lalu bantu kami menguji apakah usulan ini menarik buatmu.</p>
+  <div class="ctas"><button class="btn" type="button" data-start="Berminat">Saya berminat</button><a class="btn ghost" href="#paket">Lihat 4 paket</a></div>
+
+  <div class="pricestrip" aria-label="Harga Latar Luhur saat ini">
+    <div class="head">Harga kelas yoga di Latar Luhur per Oktober 2026</div>
+    <div><div class="lbl">Kelas reguler, sekali datang</div><div class="val num">Rp65.000</div><div class="per num">per sesi</div></div>
+    <div><div class="lbl">Membership 4x kunjungan</div><div class="val num">Rp240.000</div><div class="per num">Rp60.000 / sesi</div></div>
+    <div><div class="lbl">Membership 6x kunjungan</div><div class="val num">Rp330.000</div><div class="per num">Rp55.000 / sesi</div></div>
+    <div><div class="lbl">Membership 8x kunjungan</div><div class="val num">Rp400.000</div><div class="per num">Rp50.000 / sesi</div></div>
+  </div>
+</div></header>
+
+<section id="paket"><div class="wrap">
+  <div class="sechead">
+    <p class="eyebrow">Empat usulan</p>
+    <h2>Paket yang sedang kami uji</h2>
+    <p>Ketuk “Saya berminat” pada paket yang menarik. Pilihanmu otomatis tercentang di survei.</p>
+  </div>
+  <div class="packs">
+    <article class="pack main">
+      <p class="eyebrow">Usulan utama</p>
+      <h3>Student Pass</h3>
+      <div class="price num">Rp200.000</div>
+      <p class="sub num">4 sesi, Rp50.000 per sesi</p>
+      <ul>
+        <li>Untuk mahasiswa aktif dengan kartu mahasiswa</li>
+        <li>Kelas reguler hari kerja pukul 08.00 dan 16.30</li>
+        <li>Berlaku 30 hari sejak sesi pertama</li>
+      </ul>
+      <button class="btn small" type="button" data-pick="Student Pass" aria-pressed="false">Saya berminat</button>
+    </article>
+    <article class="pack">
+      <p class="eyebrow">Kemudahan</p>
+      <h3>Booking online</h3>
+      <div class="price">Gratis</div>
+      <p class="sub">tanpa biaya tambahan</p>
+      <ul>
+        <li>Pilih kelas dan slot sendiri via website</li>
+        <li>Pengingat WhatsApp sehari sebelumnya</li>
+        <li>Sisa slot terlihat, kelas di bawah 5 peserta diketahui lebih awal</li>
+      </ul>
+      <button class="btn small" type="button" data-pick="Booking online" aria-pressed="false">Saya berminat</button>
+    </article>
+    <article class="pack">
+      <p class="eyebrow">Ajak teman</p>
+      <h3>Bring a Friend</h3>
+      <div class="price num">Rp110.000</div>
+      <p class="sub num">berdua, normalnya Rp130.000</p>
+      <ul>
+        <li>Dua orang di kelas reguler yang sama</li>
+        <li class="num">Rp55.000 per orang</li>
+        <li>Untuk teman yang belum pernah ikut</li>
+      </ul>
+      <button class="btn small" type="button" data-pick="Bring a Friend" aria-pressed="false">Saya berminat</button>
+    </article>
+    <article class="pack">
+      <p class="eyebrow">Ulang tahun</p>
+      <h3>Birthday Treat</h3>
+      <div class="price">Gratis</div>
+      <p class="sub num">1 kelas reguler, nilai Rp65.000</p>
+      <ul>
+        <li>Diambil pada hari ulang tahun sampai 7 hari sesudahnya</li>
+        <li>Tunjukkan identitas bertanggal lahir</li>
+        <li>Berlaku sekali setahun</li>
+      </ul>
+      <button class="btn small" type="button" data-pick="Birthday Treat" aria-pressed="false">Saya berminat</button>
+    </article>
+  </div>
+</div></section>
+
+<section id="booking" style="padding-top:0"><div class="wrap">
+  <div class="sechead">
+    <p class="eyebrow">Usulan alur booking</p>
+    <h2>Dari pilih kelas sampai datang ke studio</h2>
+    <p>Saat ini booking masih lewat chat WhatsApp. Usulannya, peserta memesan sendiri seperti ini.</p>
+  </div>
+  <div class="flow">
+    <div class="step"><span class="n">1</span><h3>Pilih kelas dan slot</h3><p>Lihat jadwal Senin sampai Sabtu dan sisa kursi di tiap kelas (kapasitas 30 peserta).</p></div>
+    <div class="step"><span class="n">2</span><h3>Bayar dengan QRIS</h3><p>Pembayaran dikonfirmasi tanpa menunggu admin membalas chat.</p></div>
+    <div class="step"><span class="n">3</span><h3>Terima pengingat H-1</h3><p>WhatsApp otomatis sehari sebelum kelas, lengkap dengan jam dan lokasi.</p></div>
+  </div>
+</div></section>
+
+<section id="survei" class="survey-band"><div class="wrap survey">
+  <aside>
+    <p class="eyebrow">Survei minat</p>
+    <h2 style="font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800">Apakah usulan ini cocok buatmu?</h2>
+    <p style="color:var(--muted)">Jawabanmu dipakai untuk menilai kelayakan Student Pass dalam tugas UTS uji kelayakan ide bisnis. Nama dan nomor WhatsApp hanya dipakai untuk tugas ini dan untuk mengabarimu kalau paket benar-benar dibuka.</p>
+    <div class="facts">
+      <span id="qcount">pertanyaan · ±3 menit</span>
+      <span>Tanda <b style="color:#B2452F">*</b> wajib diisi</span>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="prog"></span></div>
+    <small id="progtxt" style="color:var(--muted)">0 dari 12 terjawab</small>
+  </aside>
+
+  <div>
+    <div class="gate" id="gate">
+      <p class="eyebrow">Langkah pertama</p>
+      <h3>Tertarik ikut yoga rutin dengan paket baru ini?</h3>
+      <p>Klik “Saya berminat” untuk mulai. Kalau belum berminat, pendapatmu tetap kami butuhkan.</p>
+      <div class="submitrow">
+        <button class="btn" type="button" data-start="Berminat">Saya berminat</button>
+        <button class="btn ghost" type="button" data-start="Belum berminat">Belum berminat, tetap isi survei</button>
+      </div>
+    </div>
+    <form id="surveyForm" novalidate hidden></form>
+    <div class="thanks" id="thanks" hidden>
+      <p class="eyebrow">Terkirim</p>
+      <h3>Terima kasih sudah mengisi survei</h3>
+      <p id="thanksMsg">Jawabanmu sudah tercatat.</p>
+      <div class="submitrow"><button class="btn ghost small" type="button" id="again">Isi lagi untuk orang lain</button></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="kajian"><div class="wrap">
+  <div class="sechead">
+    <p class="eyebrow">Ringkasan kajian</p>
+    <h2>Kenapa Student Pass layak diuji</h2>
+    <p>Ringkasan hitungan kelayakan dari laporan UTS. Angka bertanda asumsi masih menunggu data nyata dari studio dan hasil survei.</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><span class="v num">62.785</span><span class="k">mahasiswa aktif UNS (Pusat Data Kebijakan UNS, Okt 2026)</span></div>
+    <div class="kpi"><span class="v num">±847</span><span class="k">kursi kosong per bulan di kelas 08.00 dan 16.30 hari kerja</span></div>
+    <div class="kpi"><span class="v num">12 sesi</span><span class="k">titik impas per bulan, setara ±3 pembeli Student Pass</span></div>
+    <div class="kpi"><span class="v num">Rp45.000</span><span class="k">margin per sesi (Rp50.000 − biaya per peserta Rp5.000)</span></div>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Perkiraan penjualan</th><th class="r">Pembeli</th><th class="r">Laba per bulan</th><th class="r">Balik modal Rp14.650.000</th><th class="r">Kursi kosong terpakai</th></tr></thead>
+      <tbody class="num">
+        <tr><td>40 sesi</td><td class="r">10</td><td class="r">Rp1.286.000</td><td class="r">11,4 bulan</td><td class="r">4,7%</td></tr>
+        <tr><td>80 sesi</td><td class="r">20</td><td class="r">Rp3.086.000</td><td class="r">4,7 bulan</td><td class="r">9,4%</td></tr>
+        <tr><td>160 sesi</td><td class="r">40</td><td class="r">Rp6.686.000</td><td class="r">2,2 bulan</td><td class="r">18,9%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="verdict"><b>Kesimpulan sementara: Layak</b>, dengan syarat survei menunjukkan sekitar 10 pembeli potensial per bulan atau lebih. Kalau kurang, kesimpulan berubah menjadi Perlu Perbaikan.</p>
+
+  <details>
+    <summary>Asumsi dan pembanding harga</summary>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Komponen</th><th>Nilai</th><th>Dasar</th></tr></thead>
+        <tbody>
+          <tr><td>Biaya per peserta</td><td class="num">Rp5.000</td><td>Batas atas: kebersihan matras Rp2.400 + air, sabun, sampo Rp2.000 + QRIS Rp350, dibulatkan naik</td></tr>
+          <tr><td>Biaya tetap per bulan</td><td class="num">Rp514.000</td><td>20% waktu admin (asumsi) × UMK Surakarta 2026 Rp2.570.000</td></tr>
+          <tr><td>Modal awal</td><td class="num">Rp14.650.000</td><td>Seluruh peralatan studio dihitung agar konservatif, padahal sudah dimiliki</td></tr>
+          <tr><td>Honor instruktur</td><td class="num">Rp200.000 / kelas</td><td>Asumsi; tidak bertambah karena kursi kosong yang diisi</td></tr>
+          <tr><td>Skenario Rp180.000</td><td class="num">BEP 13 sesi</td><td>Jika survei menunjukkan harga wajar di bawah Rp200.000, margin turun ke Rp40.000 dan tetap layak</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Studio di Solo</th><th>Kelas lepas</th><th>Per sesi (membership)</th></tr></thead>
+        <tbody class="num">
+          <tr><td>Latar Luhur (saat ini)</td><td>Rp65.000</td><td>Rp50.000–Rp60.000</td></tr>
+          <tr><td>Ayomi Studio</td><td>Rp50.000–Rp65.000</td><td>Rp48.750–Rp57.500</td></tr>
+          <tr><td>Asha Yoga Studio</td><td>Rp45.000</td><td>Rp37.500–Rp42.500</td></tr>
+          <tr><td>Fithouse</td><td>Rp35.000–Rp50.000</td><td>±Rp33.300</td></tr>
+          <tr><td><b>Student Pass (usulan)</b></td><td>–</td><td><b>Rp50.000</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint" style="margin-top:.7rem">Harga pesaing dari poster Instagram masing-masing studio, diambil 17 Oktober 2026.</p>
+  </details>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Prototipe tugas UTS Uji Kelayakan Ide Bisnis · BINUS Business School · 2026.</span>
+  <span>Bukan situs resmi Latar Luhur Yoga &amp; Wellness Space. Harga paket baru adalah usulan dan belum berlaku.</span>
+  <span><a href="rekap.html">Lihat rekap hasil survei</a></span>
+</div></footer>
+
+<script>
+/* =====================================================================
+   SATU-SATUNYA PENGATURAN: tempel link Apps Script di antara tanda kutip.
+   Cara mendapatkannya ada di PANDUAN.md, Bagian A.
+   Kalau masih kosong, survei berjalan dalam mode demo (jawaban tidak disimpan).
+   ===================================================================== */
+const SHEET_URL = "";
+
+const QUESTIONS = [
+  /* Terisi otomatis dari tombol "Saya berminat" / "Belum berminat" di awal.
+     Di Google Form buat pertanyaan pilihan ganda "Minat awal" dengan dua opsi ini. */
+  { id:"respon", type:"hidden",
+    label:"Minat awal", options:["Berminat","Belum berminat"] },
+  { id:"nama", type:"text", required:true,
+    label:"Nama", placeholder:"Nama panggilan juga boleh" },
+  { id:"wa", type:"tel", required:false,
+    label:"Nomor WhatsApp", hint:"Opsional. Isi kalau kamu mau dikabari saat paket ini dibuka.", placeholder:"08xxxxxxxxxx" },
+  { id:"status", type:"radio", required:true,
+    label:"Status kamu saat ini",
+    options:["Mahasiswa aktif","Pekerja","Peserta magang","Lainnya"] },
+  { id:"kampus", type:"radio", required:false,
+    label:"Kalau mahasiswa, kuliah di mana?",
+    options:["UNS","UMS","UIN Raden Mas Said","ISI Surakarta","Kampus lain","Bukan mahasiswa"] },
+  { id:"usia", type:"radio", required:true,
+    label:"Usia",
+    options:["18–20 tahun","21–23 tahun","24–26 tahun","27 tahun ke atas"] },
+  { id:"pengalaman", type:"radio", required:true,
+    label:"Pengalaman yoga",
+    options:["Belum pernah","Pernah 1–3 kali","Dulu rutin, sekarang tidak","Rutin saat ini"] },
+  { id:"kenal", type:"radio", required:true,
+    label:"Seberapa kenal kamu dengan Latar Luhur?",
+    options:["Belum pernah dengar","Tahu, tapi belum pernah ikut kelas","Pernah ikut kelas"] },
+  { id:"paket", type:"checkbox", required:true, cols:true,
+    label:"Paket mana yang menarik buatmu?", hint:"Boleh pilih lebih dari satu.",
+    options:["Student Pass","Booking online","Bring a Friend","Birthday Treat","Belum ada yang menarik"] },
+  { id:"minat", type:"scale", required:true,
+    label:"Seberapa besar kemungkinan kamu membeli Student Pass (4 sesi Rp200.000) dalam sebulan ke depan?",
+    min:1, max:5, minLabel:"Tidak mungkin", maxLabel:"Sangat mungkin" },
+  { id:"harga", type:"radio", required:true,
+    label:"Berapa harga yang menurutmu wajar untuk 4 sesi yoga?",
+    options:["Di bawah Rp150.000","Rp150.000–Rp179.000","Rp180.000–Rp199.000","Rp200.000","Di atas Rp200.000"] },
+  { id:"jam", type:"checkbox", required:true, cols:true,
+    label:"Jam kelas yang paling cocok", hint:"Boleh pilih lebih dari satu.",
+    options:["Pagi 08.00 hari kerja","Sore 16.30 hari kerja","Malam hari kerja","Akhir pekan"] },
+  { id:"faktor", type:"checkbox", required:true, cols:true,
+    label:"Apa yang paling menentukan kamu memilih studio yoga?", hint:"Pilih maksimal tiga.", max:3,
+    options:["Harga per sesi","Lokasi dekat kampus atau rumah","Suasana semi-outdoor","Booking online dan pengingat","Kualitas instruktur","Bisa datang bersama teman"] },
+  { id:"hambatan", type:"radio", required:false,
+    label:"Hal utama yang membuatmu ragu ikut yoga rutin",
+    options:["Harga","Waktu atau jadwal","Lokasi","Belum percaya diri / pemula","Tidak ada teman","Tidak ada hambatan"] },
+  { id:"masukan", type:"textarea", required:false,
+    label:"Masukan atau ide paket lain", placeholder:"Misalnya: paket pagi akhir pekan, kelas khusus pemula, diskon rombongan…" }
+];
+
+/* ---------- render ---------- */
+const form = document.getElementById("surveyForm");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const VISIBLE = QUESTIONS.filter(q => q.type !== "hidden");
+let respon = "Berminat";
+
+function renderForm(){
+  let n = 0;
+  form.innerHTML = `<div class="choice" id="choice"><span>Pilihan awalmu: <b id="choiceVal"></b></span>
+      <button class="linkbtn" type="button" id="choiceSwap"></button></div>` +
+    QUESTIONS.map(q => {
+    const name = "q_" + q.id;
+    if (q.type === "hidden") return `<input type="hidden" id="${name}" name="${name}" value="">`;
+    const i = n++;
+    let body = "";
+    if (q.type === "radio" || q.type === "checkbox") {
+      body = `<div class="opts ${q.cols ? "cols" : ""}">` + q.options.map((o,j) =>
+        `<label class="opt" for="${name}_${j}"><input id="${name}_${j}" type="${q.type}" name="${name}" value="${esc(o)}"><span>${esc(o)}</span></label>`
+      ).join("") + `</div>`;
+    } else if (q.type === "scale") {
+      let cells = "";
+      for (let v = q.min; v <= q.max; v++) cells += `<label for="${name}_${v}"><input id="${name}_${v}" type="radio" name="${name}" value="${v}"><span class="num">${v}</span></label>`;
+      body = `<div class="scale">${cells}</div><div class="scale-ends"><span>${esc(q.minLabel)}</span><span>${esc(q.maxLabel)}</span></div>`;
+    } else if (q.type === "textarea") {
+      body = `<textarea id="${name}" name="${name}" placeholder="${esc(q.placeholder||"")}"></textarea>`;
+    } else if (q.type === "tel") {
+      body = `<input type="text" inputmode="tel" autocomplete="tel" id="${name}" name="${name}" placeholder="${esc(q.placeholder||"")}">`;
+    } else {
+      body = `<input type="text" autocomplete="name" id="${name}" name="${name}" placeholder="${esc(q.placeholder||"")}">`;
+    }
+    return `<fieldset data-q="${q.id}" id="fs_${q.id}">
+      <legend><span class="q">${String(i+1).padStart(2,"0")}</span>${esc(q.label)}${q.required ? '<span class="req" aria-label="wajib">*</span>' : ""}</legend>
+      ${q.hint ? `<p class="hint">${esc(q.hint)}</p>` : ""}
+      ${body}
+      <p class="errmsg" hidden></p>
+    </fieldset>`;
+  }).join("") + `<div class="submitrow"><button class="btn" type="submit" id="submitBtn">Kirim jawaban</button>
+    <small id="modeNote"></small></div>`;
+  document.getElementById("modeNote").textContent = SHEET_URL
+    ? "Jawaban tersimpan di spreadsheet tugas ini."
+    : "Mode demo: spreadsheet belum disambungkan.";
+  document.getElementById("choiceSwap").addEventListener("click", () => setRespon(respon === "Berminat" ? "Belum berminat" : "Berminat"));
+  setRespon(respon);
+  updateProgress();
+}
+
+function setRespon(v){
+  respon = v;
+  document.getElementById("q_respon").value = v;
+  document.getElementById("choiceVal").textContent = v;
+  document.getElementById("choiceSwap").textContent = v === "Berminat" ? "Ubah ke belum berminat" : "Ubah ke berminat";
+}
+
+function openSurvey(v){
+  if (form.hidden && document.getElementById("thanks").hidden) {
+    document.getElementById("gate").hidden = true;
+    form.hidden = false;
+  }
+  if (!form.hidden) setRespon(v);
+}
+
+document.querySelectorAll("[data-start]").forEach(b => b.addEventListener("click", () => {
+  openSurvey(b.dataset.start);
+  document.getElementById("survei").scrollIntoView({behavior:"smooth"});
+  setTimeout(() => { const f = document.getElementById("q_nama"); if (f && !form.hidden) f.focus({preventScroll:true}); }, 500);
+}));
+document.getElementById("qcount").textContent = `${VISIBLE.length} pertanyaan · ±3 menit`;
+
+function valuesOf(q){
+  const name = "q_" + q.id;
+  if (q.type === "checkbox") return [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(x => x.value);
+  if (q.type === "radio" || q.type === "scale") { const c = form.querySelector(`input[name="${name}"]:checked`); return c ? [c.value] : []; }
+  if (q.type === "tel") { const el = form.querySelector(`[name="${name}"]`); const v = el ? el.value.replace(/[\s-]/g,"") : ""; return v ? [v] : []; }
+  const el = form.querySelector(`[name="${name}"]`); return el && el.value.trim() ? [el.value.trim()] : [];
+}
+
+function updateProgress(){
+  const done = VISIBLE.filter(q => valuesOf(q).length).length;
+  document.getElementById("prog").style.width = (done / VISIBLE.length * 100) + "%";
+  document.getElementById("progtxt").textContent = `${done} dari ${VISIBLE.length} terjawab`;
+}
+
+function syncPickButtons(){
+  const chosen = valuesOf(QUESTIONS.find(q => q.id === "paket"));
+  document.querySelectorAll("[data-pick]").forEach(b => b.setAttribute("aria-pressed", chosen.includes(b.dataset.pick) ? "true" : "false"));
+}
+
+form.addEventListener("change", e => {
+  const fs = e.target.closest("fieldset");
+  const q = fs && QUESTIONS.find(x => x.id === fs.dataset.q);
+  if (q && q.max && q.type === "checkbox") {
+    const checked = form.querySelectorAll(`input[name="q_${q.id}"]:checked`);
+    if (checked.length > q.max) { e.target.checked = false; showErr(fs, `Pilih maksimal ${q.max}.`); }
+    else clearErr(fs);
+  } else if (fs) clearErr(fs);
+  updateProgress(); syncPickButtons();
+});
+form.addEventListener("input", e => {
+  if (e.target.tagName === "TEXTAREA" || e.target.type === "text") { const fs = e.target.closest("fieldset"); if (fs) clearErr(fs); updateProgress(); }
+});
+
+function showErr(fs,msg){ fs.classList.add("err"); const m = fs.querySelector(".errmsg"); m.textContent = msg; m.hidden = false; }
+function clearErr(fs){ fs.classList.remove("err"); fs.querySelector(".errmsg").hidden = true; }
+
+/* tombol "Saya berminat" di kartu paket */
+document.querySelectorAll("[data-pick]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    openSurvey("Berminat");
+    const box =[...form.querySelectorAll('input[name="q_paket"]')].find(x => x.value === btn.dataset.pick);
+    if (!box) return;
+    box.checked = !box.checked;
+    const none = [...form.querySelectorAll('input[name="q_paket"]')].find(x => x.value === "Belum ada yang menarik");
+    if (box.checked && none) none.checked = false;
+    clearErr(document.getElementById("fs_paket"));
+    updateProgress(); syncPickButtons();
+  });
+});
+
+/* ---------- kirim ---------- */
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  let firstBad = null;
+  VISIBLE.forEach(q => {
+    const fs = document.getElementById("fs_" + q.id);
+    const v = valuesOf(q);
+    if (q.required && !v.length) { showErr(fs, "Pertanyaan ini wajib diisi."); firstBad = firstBad || fs; }
+    else if (q.type === "tel" && v.length && !/^(\+62|62|0)8\d{7,12}$/.test(v[0])) {
+      showErr(fs, "Tulis nomor WhatsApp yang diawali 08 atau +62, contoh 081234567890."); firstBad = firstBad || fs;
+    }
+  });
+  if (firstBad) { firstBad.scrollIntoView({behavior:"smooth", block:"center"}); return; }
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true; btn.textContent = "Mengirim…";
+  let msg = "Jawabanmu sudah tercatat.";
+
+  if (SHEET_URL) {
+    const data = {};
+    QUESTIONS.forEach(q => { const v = valuesOf(q); data[q.id] = q.type === "checkbox" ? v : (v[0] || ""); });
+    try {
+      await fetch(SHEET_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:JSON.stringify(data) });
+    } catch (err) {
+      btn.disabled = false; btn.textContent = "Kirim jawaban";
+      document.getElementById("modeNote").textContent = "Gagal terkirim. Periksa koneksi internet, lalu coba lagi.";
+      return;
+    }
+  } else {
+    msg = "Ini mode demo, jadi jawaban belum disimpan. Sambungkan spreadsheet di pengaturan situs supaya jawaban tersimpan.";
+  }
+  const nama = valuesOf(QUESTIONS.find(q => q.id === "nama"))[0] || "";
+  document.querySelector("#thanks h3").textContent = nama ? `Terima kasih, ${nama}` : "Terima kasih sudah mengisi survei";
+  document.getElementById("thanksMsg").textContent = msg;
+  form.hidden = true;
+  document.getElementById("thanks").hidden = false;
+  document.getElementById("thanks").scrollIntoView({behavior:"smooth", block:"center"});
+});
+
+document.getElementById("again").addEventListener("click", () => {
+  respon = "Berminat";
+  renderForm(); form.hidden = true; document.getElementById("thanks").hidden = true;
+  document.getElementById("gate").hidden = false;
+  updateProgress(); syncPickButtons();
+  document.getElementById("survei").scrollIntoView({behavior:"smooth"});
+});
+
+renderForm();
+</script>
+</body>
+</html>
